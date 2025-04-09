@@ -39,6 +39,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+            <version>2.7.10</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.jzo2o</groupId>
             <artifactId>jzo2o-knife4j-web</artifactId>
         </dependency>
@@ -78,10 +84,10 @@
             <groupId>com.jzo2o</groupId>
             <artifactId>jzo2o-mysql</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.jzo2o</groupId>
-            <artifactId>jzo2o-xxl-job</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.jzo2o</groupId>-->
+<!--            <artifactId>jzo2o-xxl-job</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
