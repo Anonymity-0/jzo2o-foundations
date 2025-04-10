@@ -22,8 +22,10 @@ import com.jzo2o.foundations.model.dto.request.ServeUpsertReqDTO;
 import com.jzo2o.foundations.model.dto.response.ServeResDTO;
 import com.jzo2o.foundations.service.IServeService;
 import com.jzo2o.mysql.utils.PageHelperUtils;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,12 @@ public class ServeServiceImpl extends ServiceImpl<ServeMapper, Serve> implements
 
     @Resource
     private RegionMapper regionMapper;
+
+    @Cacheable(value = RedisConstants.CacheName.SERVE, key = "#id",cacheManager = RedisConstants.CacheManager.ONE_DAY)
+    @Override
+    public Serve queryServeByIdCache(Long id) {
+        return getById(id);
+    }
 
     /**
      * 分页查询
@@ -118,6 +126,8 @@ public class ServeServiceImpl extends ServiceImpl<ServeMapper, Serve> implements
 
     @Override
     @Transactional
+    // CachePut注解用于更新缓存，value为缓存名称，key为缓存key，cacheManager为缓存管理器，unless为条件表达式，当条件表达式为true时，不缓存，否则缓存
+    @CachePut(value = RedisConstants.CacheName.SERVE,key = "#id",cacheManager = RedisConstants.CacheManager.ONE_DAY)
     public Serve onSale(Long id){
         Serve serve = baseMapper.selectById(id);
         if(ObjectUtil.isNull(serve)){
@@ -153,6 +163,8 @@ public class ServeServiceImpl extends ServiceImpl<ServeMapper, Serve> implements
 
     @Override
     @Transactional
+    // CacheEvict注解用于删除缓存，value为缓存名称，key为缓存key，beforeInvocation为是否在方法执行前删除缓存，默认为false，即在方法执行后删除缓存
+    @CacheEvict(value = RedisConstants.CacheName.SERVE,key = "#id")
     public Serve offSale(Long id){
         Serve serve = baseMapper.selectById(id);
         if(ObjectUtil.isNull(serve)){

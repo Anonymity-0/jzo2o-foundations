@@ -147,6 +147,7 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
      * @param id 区域id
      */
     @Override
+    @CacheEvict(value = RedisConstants.CacheName.JZ_CACHE, key = "'ACTIVE_REGIONS'")
     public void active(Long id) {
         //区域信息
         Region region = baseMapper.selectById(id);
@@ -179,6 +180,12 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
      * @param id 区域id
      */
     @Override
+    @Caching(evict = {
+            // 删除已经启用的区域列表
+            @CacheEvict(value = RedisConstants.CacheName.JZ_CACHE, key = "'ACTIVE_REGIONS'"),
+            // 删除首页服务列表
+            @CacheEvict(value = RedisConstants.CacheName.SERVE_ICON, key = "#id")
+    })
     public void deactivate(Long id) {
         //区域信息
         Region region = baseMapper.selectById(id);
@@ -208,8 +215,15 @@ public class RegionServiceImpl extends ServiceImpl<RegionMapper, Region> impleme
      * @return 区域简略列表
      */
     @Override
+    // key如果要用固定的字符串，需要加单引号
+    @Cacheable(value = RedisConstants.CacheName.JZ_CACHE, key = "'ACTIVE_REGIONS'", cacheManager = RedisConstants.CacheManager.FOREVER)
     public List<RegionSimpleResDTO> queryActiveRegionListCache() {
         return queryActiveRegionList();
+    }
+
+    @Override
+    public void queryById(Long regionId) {
+        getById(regionId);
     }
 
 }

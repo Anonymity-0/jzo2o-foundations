@@ -78,4 +78,5 @@ public interface IRegionService extends IService<Region> {
      */
     List<RegionSimpleResDTO> queryActiveRegionListCache();
 
+    void queryById(Long regionId);
 }
