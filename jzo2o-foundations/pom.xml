@@ -88,6 +88,14 @@
             <groupId>com.jzo2o</groupId>
             <artifactId>jzo2o-xxl-job</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-es</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jzo2o</groupId>
+            <artifactId>jzo2o-canal-sync</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
